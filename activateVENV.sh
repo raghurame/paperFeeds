@@ -1,0 +1,1 @@
+source paperbot/bin/activate
