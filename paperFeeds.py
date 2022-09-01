@@ -9,6 +9,9 @@ from bs4 import BeautifulSoup
 
 def checkFeeds (url):
 	newsFeed = feedparser.parse(url)
+	# for i in newsFeed['entries']:
+	# 	print (i)
+	# 	exit (1)
 	return newsFeed['entries']
 
 def removeSpaces (inputString):
@@ -52,22 +55,23 @@ def checkRelevance (url):
 	else:
 		# This should return 0, but there aren't many relevant papers while searching strictly with those keywords
 		# So temporarily changing this to 1. 
-		# Later on, this can be changed to 0 and the bot can return very relevant searches
+		# Later on, this can be changed to 0 and the bot can return relevant searches
 		return 1
 
 def findNewPapers (feeds1, feeds2):
 	print ("Finding new papers")
-	itemFound = 0
 
 	for item2 in feeds2:
+		itemFound = 0
 		for item1 in feeds1:
 			if (item2['id'] == item1['id']):
 				itemFound = 1
 
-	if (itemFound == 0):
-		isRelevant = checkRelevance (item['link'])
-		if (isRelevant):
-			sendMessage (item['title'] + "\n" + item['id'])
+		if (itemFound == 0):
+			isRelevant = checkRelevance (item2['link'])
+			print ("itemFound == 0\t" + item2['link'])
+			if (isRelevant):
+				sendMessage (item2['title'] + "\n" + item2['id'])
 
 def getInitialFeeds (logFile, url):
 	isFileExists = exists (logFile)
@@ -79,6 +83,9 @@ def getInitialFeeds (logFile, url):
 	else:
 		with open (logFile, "r", encoding = 'utf-8') as file:
 			initialFeeds = json.load (file)
+			# for i in initialFeeds:
+			# 	print (i)
+			# exit (1)
 
 	return initialFeeds
 
